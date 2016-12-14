@@ -247,3 +247,30 @@ def client_move(board):
             return board
 
 #Function ends here----------------------------------------------------------------------------
+
+
+#Function to make move for server at randomly selected coordinates
+#if the move is a hit, check for sinking of ship and also for Win
+#If it is not hit, return miss
+def server_move(board):
+    # generate user coordinates from the user and try to make move
+    # if move is a hit, check ship sunk and win condition
+    while (True):
+        x_cord = random.randint(1, 10) - 1
+        y_cord = random.randint(1, 10) - 1
+        res = make_move(board, x_cord, y_cord)
+        if res == "hit":
+            print "Hit at " + str(x_cord + 1) + "," + str(y_cord + 1)
+            check_sink(board, x_cord, y_cord)
+            board[x_cord][y_cord] = '$'
+            if check_win(board):
+                return "WIN"
+        elif res == "miss":
+            print "Sorry, " + str(x_cord + 1) + "," + str(y_cord + 1) + " is a miss."
+            board[x_cord][y_cord] = "*"
+
+        if res != "try again":
+            return board
+
+
+#Function ends here----------------------------------------------------------------------------
