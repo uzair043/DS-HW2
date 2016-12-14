@@ -274,3 +274,43 @@ def server_move(board):
 
 
 #Function ends here----------------------------------------------------------------------------
+
+
+#Function to check which ship is sunk
+#The alphabet value will be get from the coordinates and then assign that to a variable
+#Then return the value of that ship
+def check_sink_ship(board, x_cord, y_cord):
+    # figure out what ship was hit
+    if board[x_cord][y_cord] == "A":
+        sunken_ship = "Aircraft Carrier"
+    elif board[x_cord][y_cord] == "B":
+        sunken_ship = "Battleship"
+    elif board[x_cord][y_cord] == "S":
+        sunken_ship = "Submarine"
+    elif board[x_cord][y_cord] == "D":
+        sunken_ship = "Destroyer"
+    elif board[x_cord][y_cord] == "P":
+        sunken_ship = "Patrol Boat"
+
+    # mark cell as hit and check if sunk
+    board[-1][sunken_ship] -= 1
+    if board[-1][sunken_ship] == 0:
+        print sunken_ship + " is Sunken."
+
+#Function ends here----------------------------------------------------------------------------
+
+
+#Function to check which board
+#It will check all the cell values and return true if all the cell values contains a hit and false otherwise
+def check_win(board):
+    BOARD_SIZE = 10
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            if board[i][j] != -1 and board[i][j] != '*' and board[i][j] != '$':
+                return False
+    return True
+
+
+#Function ends here----------------------------------------------------------------------------
+
+
