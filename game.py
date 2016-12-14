@@ -78,7 +78,7 @@ def ship_placement_client(board, ships):
             print "Placing a/an " + ship
             x_cord, y_cord = get_coordinates()
             orientation = vertical_or_horizontal()
-            is_valid = validate(board, ships[ship], x_cord, y_cord, orientation)
+            is_valid = validate_coordinates(board, ships[ship], x_cord, y_cord, orientation)
             if not is_valid:
                 print "The entered coordinates are not correct. Please try again."
                 raw_input("Press any key to continue...")
@@ -111,7 +111,7 @@ def random_ship_placement_server(board, ships):
                 orientation = "v"
             else:
                 orientation = "h"
-            is_valid = validate(board, ships[ship], x_cord, y_cord, orientation)
+            is_valid = validate_coordinates(board, ships[ship], x_cord, y_cord, orientation)
 
         # server placing the ship
         print "Ship placed by server:  " + ship
@@ -134,5 +134,42 @@ def place_ship(board,ship, s_type, orientation, x_cord, y_cord):
 			board[x_cord][y_cord+i] = s_type
 
 	return board
+
+#Function ends here----------------------------------------------------------------------------
+
+
+#Function to validate the input coordinates from the user and random coordinates from the server
+#the output will be true if the ship can be place on the given coordinates, false otherwise
+def validate_coordinates(board, ship, x_cord, y_cord, orientation):
+
+    BOARD_SIZE = 10
+    if orientation == "v" and x_cord + ship > BOARD_SIZE:
+        return False
+    elif orientation == "h" and y_cord + ship > BOARD_SIZE:
+        return False
+    else:
+        if orientation == "v":
+            for i in range(ship):
+                if board[x_cord + i][y_cord] != -1:
+                    return False
+        elif orientation == "h":
+            for i in range(ship):
+                if board[x_cord][y_cord + i] != -1:
+                    return False
+
+    return True
+
+#Function ends here----------------------------------------------------------------------------
+
+#Function to choose orientation
+def vertical_or_horizontal():
+
+	#get orientation from user until user enters correct orientation
+	while(True):
+		choice = raw_input("Enter v for vertical and h for horizontal: ")
+		if choice == "v" or choice == "h":
+			return choice
+		else:
+			print "Please only enter letters v or h."
 
 #Function ends here----------------------------------------------------------------------------
