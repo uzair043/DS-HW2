@@ -173,3 +173,77 @@ def vertical_or_horizontal():
 			print "Please only enter letters v or h."
 
 #Function ends here----------------------------------------------------------------------------
+
+
+#Function to get coordinates from the user
+def get_coor():
+    while (True):
+        #get coordinates from the user
+        input_coor = raw_input("Enter coordinates to place ship(r,c): ")
+        try:
+            #check if two values were entered by user
+            #values should be separated by comma
+            coordinates = input_coor.split(",")
+            if len(coordinates) != 2:
+                raise Exception("Too many/few coordinates.");
+
+            coordinates[0] = int(coordinates[0]) - 1
+            coordinates[1] = int(coordinates[1]) - 1
+
+            # check that values of coordinates should be between 1 to 10
+            if coordinates[0] > 9 or coordinates[0] < 0 or coordinates[1] > 9 or coordinates[1] < 0:
+                raise Exception("Please enter values between 1 to 10.")
+
+            # return input coordinates if they are in correct format
+            return coordinates
+
+        #Throw an error message if the value is not a numeric value.
+        except ValueError:
+            print "Please enter only numeric values."
+        except Exception as e:
+            print e
+
+
+# Function ends here----------------------------------------------------------------------------
+
+
+#Making a board move
+def make_move(board, x_cord, y_cord):
+    # make a move on the board and return the result, hit, miss or try again for repeat hit
+    if board[x_cord][y_cord] == -1:
+        return "miss"
+    elif board[x_cord][y_cord] == '*' or board[x_cord][y_cord] == '$':
+        return "try again"
+    else:
+        return "hit"
+
+#Function ends here----------------------------------------------------------------------------
+
+
+#function to get the coordinates from the client to make a move
+#if the move is a hit, check for sinking of ship and also for Win
+#If it is not hit, return miss
+#If already hit, return try again
+def client_move(board):
+    # get coordinates from the client to make a move
+    # if move is a hit, check for sinking of whole ship
+    #also check for Win condition
+    while (True):
+        x_cord, y_cord = get_coor()
+        res = make_move(board, x_cord, y_cord)
+        if res == "hit":
+            print "Hit at " + str(x_cord + 1) + "," + str(y_cord + 1)
+            check_sink(board, x_cord, y_cord)
+            board[x_cord][y_cord] = '$'
+            if check_win(board):
+                return "WIN"
+        elif res == "miss":
+            print "Sorry, " + str(x_cord + 1) + "," + str(y_cord + 1) + " is a miss."
+            board[x_cord][y_cord] = "*"
+        elif res == "try again":
+            print "Sorry, that coordinate was already hit. Please try again"
+
+        if res != "try again":
+            return board
+
+#Function ends here----------------------------------------------------------------------------
