@@ -31,11 +31,7 @@ def __info():
 def game_board(s, board):
 
     BOARD_SIZE = 10
-    player = "Server"
-    if s == "c":
-        player = "client"
-
-    print "The " + player + " game board is as follows: "
+    print "The game board is as follows: "
 
     # printing the column numbers
     print " ",
