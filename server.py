@@ -15,6 +15,8 @@ LOG = logging.getLogger()
 
 import socket
 from argparse import ArgumentParser
+import game
+import copy
 
 # Constants -------------------------------------------------------------------
 ___NAME = 'Battleship Game'
@@ -28,6 +30,7 @@ def __info():
 # TCP related constants -------------------------------------------------------
 DEFAULT_SERVER_PORT = 7777
 DEFAULT_SERVER_INET_ADDR = '127.0.0.1'
+
 
 
 # Main method -----------------------------------------------------------------
@@ -60,6 +63,8 @@ if __name__ == '__main__':
     while True:
         try:
             c, addr = s.accept()
+            c.send('Enter your name: ')
+            client_name =  c.recv(1024)
         except KeyboardInterrupt as e:
             LOG.debug('Crtrl+C issued ...')
             LOG.info('Terminating server ...')

@@ -15,6 +15,16 @@ import random
 
 #End Imports------------------------------------------------------
 
+# Constants -------------------------------------------------------------------
+___NAME = 'Battleship Game'
+___VER = '0.1.0.0'
+___DESC = 'Battleship Game'
+___BUILT = '2016-12-13'
+# Private methods -------------------------------------------------------------
+def __info():
+    return '%s version %s (%s)' % (___NAME, ___VER, ___BUILT)
+
+
 
 #Function to create game board
 #This function will create a 10x10 board
@@ -22,9 +32,10 @@ def game_board(s, board):
 
     BOARD_SIZE = 10
     player = "Server"
-    if s == "u":
-        player = "User"
+    if s == "c":
+        player = "client"
 
+    print "The " + player + " game board is as follows: "
 
     # printing the column numbers
     print " ",
@@ -56,7 +67,7 @@ def game_board(s, board):
                 print " | ",
         print
 
-        # print a horizontal line
+        # print the horizontal line when the cells have been drawn for a single row
         if i != BOARD_SIZE:
             print "   ----------------------------------------------------------"
         else:
@@ -87,7 +98,7 @@ def ship_placement_client(board, ships):
         board = place_ship(board, ships[ship], ship[0], orientation, x_cord, y_cord)
         game_board("u", board)
 
-    print "The ship is placed on the given coordinates."
+    print "All the ships are placed at the given coordinates."
     raw_input("Press any key to continue...")
     return board
 
@@ -115,7 +126,7 @@ def random_ship_placement_server(board, ships):
 
         # server placing the ship
         print "Ship placed by server:  " + ship
-        board = place_ship(board, ships[ship], ship[0], ori, x, y)
+        board = place_ship(board, ships[ship], ship[0], get_ori, x_cord, y_cord)
 
     return board
 
@@ -176,10 +187,11 @@ def vertical_or_horizontal():
 
 
 #Function to get coordinates from the user
-def get_coor():
+def get_coordinates():
     while (True):
         #get coordinates from the user
-        input_coor = raw_input("Enter coordinates to place ship(r,c): ")
+        #These coordinates can be used for placing ship or guessing the ship when it is user's move to guess the ship
+        input_coor = raw_input("Enter coordinates to place/guess ship(r,c): ")
         try:
             #check if two values were entered by user
             #values should be separated by comma
@@ -229,11 +241,11 @@ def client_move(board):
     # if move is a hit, check for sinking of whole ship
     #also check for Win condition
     while (True):
-        x_cord, y_cord = get_coor()
+        x_cord, y_cord = get_coordinates()
         res = make_move(board, x_cord, y_cord)
         if res == "hit":
             print "Hit at " + str(x_cord + 1) + "," + str(y_cord + 1)
-            check_sink(board, x_cord, y_cord)
+            check_sink_ship(board, x_cord, y_cord)
             board[x_cord][y_cord] = '$'
             if check_win(board):
                 return "WIN"
@@ -261,7 +273,7 @@ def server_move(board):
         res = make_move(board, x_cord, y_cord)
         if res == "hit":
             print "Hit at " + str(x_cord + 1) + "," + str(y_cord + 1)
-            check_sink(board, x_cord, y_cord)
+            check_sink_ship(board, x_cord, y_cord)
             board[x_cord][y_cord] = '$'
             if check_win(board):
                 return "WIN"
@@ -312,5 +324,4 @@ def check_win(board):
 
 
 #Function ends here----------------------------------------------------------------------------
-
 
